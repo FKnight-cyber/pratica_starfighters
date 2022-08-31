@@ -11,12 +11,23 @@ function countStars(array:any){
     return sum;
 }
 
-export async function battle(firstUser:string, secondUser:string ) {
-    const user1 = await axios.get(`https://api.github.com/users/${firstUser}/repos`);
-    const user2 = await axios.get(`https://api.github.com/users/${secondUser}/repos`);
+function error(error:number){
+    return {
+        type: error
+    }
+}
 
-    if(user1.data.length === 0) throw null;
-    if(user2.data.length === 0) throw null;
+export async function battle(firstUser:string, secondUser:string ) {
+
+    if(!firstUser) throw error(422);
+    if(!secondUser) throw error(422);
+
+    const user1 = await axios.get(`https://api.github.com/users/${firstUser}/repos`).catch(()=>{
+        throw error(404);
+    });
+    const user2 = await axios.get(`https://api.github.com/users/${secondUser}/repos`).catch(()=>{
+        throw error(404);
+    });
 
     const starGaze1 = countStars(user1.data);
     const starGaze2 = countStars(user2.data);
