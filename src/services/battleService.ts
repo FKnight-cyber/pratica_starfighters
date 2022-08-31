@@ -37,7 +37,7 @@ export async function battle(firstUser:string, secondUser:string ) {
         await battleRep.insert(firstUser)
     }
 
-    const check2:any = await battleRep.find(firstUser);
+    const check2:any = await battleRep.find(secondUser);
     if(!check2) {
         await battleRep.insert(secondUser)
     }
